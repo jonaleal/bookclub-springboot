@@ -6,8 +6,8 @@ import com.udea.bookclub.exceptions.RepositoryException;
 import com.udea.bookclub.models.User;
 import com.udea.bookclub.repositories.IUserRepository;
 import com.udea.bookclub.services.facade.IUserService;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,10 +18,12 @@ public class UserService implements IUserService {
 
     private final IUserRepository userRepository;
     private final IUserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(IUserRepository userRepository, IUserMapper userMapper) {
+    public UserService(IUserRepository userRepository, IUserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -29,12 +31,14 @@ public class UserService implements IUserService {
         if (userRepository.findByUsername(userDTO.username()).isPresent()) {
             throw new RepositoryException("Username already exist");
         }
-        return userMapper.userToUserDTO(userRepository.save(userMapper.userDTOToUser(userDTO)));
+        User user = userMapper.toUser(userDTO);
+        user.setPassword(passwordEncoder.encode(userDTO.password()));
+        return userMapper.toUserDTO(userRepository.save(user));
     }
 
     @Override
     public List<UserDTO> findAll(Pageable pageable) {
-        return userMapper.usersToUsersDTO(userRepository.findAll(pageable).toList());
+        return userMapper.toUsersDTO(userRepository.findAll(pageable).toList());
     }
 
     @Override
@@ -43,7 +47,7 @@ public class UserService implements IUserService {
         if (user.isEmpty()) {
             throw new RepositoryException("User not found");
         }
-        return userMapper.userToUserDTO(user.get());
+        return userMapper.toUserDTO(user.get());
     }
 
     @Override
@@ -52,11 +56,10 @@ public class UserService implements IUserService {
             throw new RepositoryException("User not found");
         }
         Optional<User> user = userRepository.findByUsernameOrEmail(userDTO.username(), userDTO.email());
-        if (user.isPresent()) {
-            if (!user.get().getUserId().equals(userDTO.userId())){
-                throw new RepositoryException("Username or email already exist");
-            }
+        if (user.isPresent() && !user.get().getUserId().equals(userDTO.userId())) {
+            throw new RepositoryException("Username or email already exist");
         }
-        return userMapper.userToUserDTO(userRepository.save(userMapper.userDTOToUser(userDTO)));
+        return userMapper.toUserDTO(userRepository.save(userMapper.toUser(userDTO)));
     }
+
 }
