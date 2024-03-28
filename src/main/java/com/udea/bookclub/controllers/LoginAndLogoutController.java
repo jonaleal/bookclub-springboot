@@ -1,6 +1,9 @@
 package com.udea.bookclub.controllers;
 
 import com.udea.bookclub.dtos.LoginAndSignUpDTO;
+import com.udea.bookclub.dtos.ResponseDTO;
+import com.udea.bookclub.dtos.UserDTO;
+import com.udea.bookclub.services.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,17 +29,19 @@ public class LoginAndLogoutController {
     private final HttpServletRequest httpServletRequest;
     private final SecurityContextLogoutHandler securityContextLogoutHandler;
     private final HttpServletResponse httpServletResponse;
+    private final UserService userService;
 
-    public LoginAndLogoutController(AuthenticationManager authenticationManager, HttpServletRequest httpServletRequest, SecurityContextLogoutHandler securityContextLogoutHandler, HttpServletResponse httpServletResponse) {
+    public LoginAndLogoutController(AuthenticationManager authenticationManager, HttpServletRequest httpServletRequest, SecurityContextLogoutHandler securityContextLogoutHandler, HttpServletResponse httpServletResponse, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.httpServletRequest = httpServletRequest;
         this.securityContextLogoutHandler = securityContextLogoutHandler;
         this.httpServletResponse = httpServletResponse;
+        this.userService = userService;
     }
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginAndSignUpDTO loginRequest) {
+    public ResponseEntity<ResponseDTO<UserDTO>> login(@RequestBody LoginAndSignUpDTO loginRequest) {
         Authentication authenticationRequest = new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password());
 
         try {
@@ -46,9 +51,10 @@ public class LoginAndLogoutController {
             securityContext.setAuthentication(authenticationResponse);
             HttpSession session = httpServletRequest.getSession(true);
             session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
-            return ResponseEntity.ok("Successful authentication");
+            UserDTO user = userService.findByUsername(loginRequest.username());
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>("Logged in", user));
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Failed authentication");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseDTO<>("Invalid credentials", null));
         }
     }
 

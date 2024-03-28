@@ -8,12 +8,16 @@ import java.util.List;
 
 @Entity
 @Table(name = "book_clubs")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @EqualsAndHashCode
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class BookClub {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "club_id")
-    private Long clubId;
+    @Column(name = "book_club_id")
+    private Long bookClubId;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
@@ -25,11 +29,18 @@ public class BookClub {
     @Convert(converter = StringListConverter.class)
     private List<String> tags;
 
-    @Column(name = "meet_link", length = 255)
+    @Column(name = "meet_link")
     private String meetLink;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "bookClub", cascade = CascadeType.REMOVE)
+    private List<Discussion> discussions;
+
+    @OneToMany(mappedBy = "bookClub", cascade = CascadeType.REMOVE)
+    private List<UserBookClub> bookClubUsers;
+
 }
 

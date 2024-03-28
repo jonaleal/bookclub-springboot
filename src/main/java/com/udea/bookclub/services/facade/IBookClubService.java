@@ -1,6 +1,8 @@
 package com.udea.bookclub.services.facade;
 
 import com.udea.bookclub.dtos.BookClubDTO;
+import com.udea.bookclub.dtos.DiscussionDTO;
+import com.udea.bookclub.dtos.UserDTO;
 import com.udea.bookclub.exceptions.RepositoryException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,4 +20,8 @@ public interface IBookClubService {
     BookClubDTO update(BookClubDTO bookClubDTO) throws RepositoryException;
 
     void deleteById(Long id) throws RepositoryException;
+
+    List<UserDTO> findUsersByBookClubId(Long id) throws RepositoryException;
+
+    List<DiscussionDTO> findDiscussionsByBookClubId(Long id) throws RepositoryException;
 }

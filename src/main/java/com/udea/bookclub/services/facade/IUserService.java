@@ -19,4 +19,6 @@ public interface IUserService {
     UserDTO findById(Long id) throws RepositoryException;
 
     UserDTO update(UserDTO userDTO) throws RepositoryException;
+
+    UserDTO findByUsername(String username);
 }

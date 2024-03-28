@@ -2,11 +2,18 @@ package com.udea.bookclub.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "discussions")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @EqualsAndHashCode
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class Discussion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +26,7 @@ public class Discussion {
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", columnDefinition = "DATE", nullable = false)
     private LocalDate createdAt;
 
     @ManyToOne
@@ -27,6 +34,9 @@ public class Discussion {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "club_id", referencedColumnName = "club_id")
+    @JoinColumn(name = "book_club_id", referencedColumnName = "book_club_id")
     private BookClub bookClub;
+
+    @OneToMany(mappedBy = "discussion", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
 }

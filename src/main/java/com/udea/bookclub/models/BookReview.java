@@ -6,20 +6,26 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "comments")
+@Table(name = "book_reviews")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Comment {
+public class BookReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
-    private Long commentId;
+    @Column(name = "book_review_id")
+    private Long bookReviewId;
 
-    @Column(name = "comment", nullable = false, columnDefinition = "TEXT")
-    private String comment;
+    @Column(name = "book_title", nullable = false)
+    private String bookTitle;
+
+    @Column(name = "review", nullable = false, columnDefinition = "TEXT")
+    private String review;
+
+    @Column(name = "rating", nullable = false)
+    private Double rating;
 
     @Column(name = "created_at", columnDefinition = "DATE", nullable = false)
     private LocalDate createdAt;
@@ -29,7 +35,7 @@ public class Comment {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "discussion_id", referencedColumnName = "discussion_id")
-    private Discussion discussion;
-}
+    @JoinColumn(name = "book_club_id", referencedColumnName = "book_club_id")
+    private BookClub bookClub;
 
+}

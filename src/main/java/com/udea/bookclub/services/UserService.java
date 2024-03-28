@@ -27,7 +27,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDTO save(UserDTO userDTO) throws RepositoryException {
+    public UserDTO save(UserDTO userDTO) {
         if (userRepository.findByUsername(userDTO.username()).isPresent()) {
             throw new RepositoryException("Username already exist");
         }
@@ -51,7 +51,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDTO update(UserDTO userDTO) throws RepositoryException {
+    public UserDTO update(UserDTO userDTO) {
         if (userRepository.findById(userDTO.userId()).isEmpty()) {
             throw new RepositoryException("User not found");
         }
@@ -60,6 +60,15 @@ public class UserService implements IUserService {
             throw new RepositoryException("Username or email already exist");
         }
         return userMapper.toUserDTO(userRepository.save(userMapper.toUser(userDTO)));
+    }
+
+    @Override
+    public UserDTO findByUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            throw new RepositoryException("User not found");
+        }
+        return userMapper.toUserDTO(user.get());
     }
 
 }
