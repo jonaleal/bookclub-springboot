@@ -45,11 +45,12 @@ public class CommentService implements ICommentService {
 
     @Override
     public CommentDTO update(CommentDTO commentDTO) throws RepositoryException {
-        Optional<Comment> comment = commentRepository.findById(commentDTO.commentId());
-        if (comment.isEmpty()) {
+        Optional<Comment> existingComment = commentRepository.findById(commentDTO.commentId());
+        if (existingComment.isEmpty()) {
             throw new RepositoryException("Comment not found");
         }
-        return commentMapper.toCommentDTO(commentRepository.save(comment.get()));
+        Comment comment = commentMapper.toComment(commentDTO);
+        return commentMapper.toCommentDTO(commentRepository.save(comment));
     }
 
     @Override

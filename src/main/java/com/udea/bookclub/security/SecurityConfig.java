@@ -35,7 +35,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(
                                 //Allowing public access to bookclubs list
-                                HttpMethod.GET, "api/v1/bookclub/").permitAll()
+                                HttpMethod.GET, "api/v1/book-club/").permitAll()
                         .requestMatchers(
                                 //Allowing public access to user registration
                                 HttpMethod.POST, "api/v1/user/").permitAll()

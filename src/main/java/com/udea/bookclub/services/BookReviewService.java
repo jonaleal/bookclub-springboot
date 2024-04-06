@@ -46,11 +46,12 @@ public class BookReviewService implements IBookReviewService {
 
     @Override
     public BookReviewDTO update(BookReviewDTO bookReviewDTO) throws RepositoryException {
-        Optional<BookReview> bookReview = bookReviewRepository.findById(bookReviewDTO.bookReviewId());
-        if (bookReview.isEmpty()) {
+        Optional<BookReview> existingBookReview = bookReviewRepository.findById(bookReviewDTO.bookReviewId());
+        if (existingBookReview.isEmpty()) {
             throw new RepositoryException("BookReview not found");
         }
-        return bookReviewMapper.toBookReviewDTO(bookReviewRepository.save(bookReview.get()));
+        BookReview bookReview = bookReviewMapper.toBookReview(bookReviewDTO);
+        return bookReviewMapper.toBookReviewDTO(bookReviewRepository.save(bookReview));
     }
 
     @Override

@@ -45,11 +45,12 @@ public class DiscussionService implements IDiscussionService {
 
     @Override
     public DiscussionDTO update(DiscussionDTO discussionDTO) throws RepositoryException {
-        Optional<Discussion> discussion = discussionRepository.findById(discussionDTO.discussionId());
-        if (discussion.isEmpty()) {
+        Optional<Discussion> existingDiscussion = discussionRepository.findById(discussionDTO.discussionId());
+        if (existingDiscussion.isEmpty()) {
             throw new RepositoryException("Discussion not found");
         }
-        return discussionMapper.toDiscussionDTO(discussionRepository.save(discussion.get()));
+        Discussion discussion = discussionMapper.toDiscussion(discussionDTO);
+        return discussionMapper.toDiscussionDTO(discussionRepository.save(discussion));
     }
 
     @Override
