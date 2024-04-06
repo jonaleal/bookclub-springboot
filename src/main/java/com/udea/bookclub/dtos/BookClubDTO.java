@@ -1,6 +1,5 @@
 package com.udea.bookclub.dtos;
 
-import com.udea.bookclub.models.User;
 import jakarta.validation.constraints.Null;
 
 import java.util.List;

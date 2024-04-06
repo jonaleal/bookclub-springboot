@@ -3,7 +3,6 @@ package com.udea.bookclub.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
