@@ -43,7 +43,7 @@ public class SecurityConfig {
                                 "api/v1/login", "/api/v1/logout"
                                 //Allowing public access to api-docs
                                 , "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/api-docs").permitAll()
-                        .requestMatchers("api/v1/**").permitAll()
+                        .requestMatchers("api/v1/**", "**").permitAll()
                         .anyRequest().authenticated()
                 )
 
