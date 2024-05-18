@@ -30,6 +30,10 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<UserBookClub> userBookClubs;
 

@@ -1,9 +1,6 @@
 package com.udea.bookclub.controllers;
 
-import com.udea.bookclub.dtos.BookClubDTO;
-import com.udea.bookclub.dtos.DiscussionDTO;
-import com.udea.bookclub.dtos.ResponseDTO;
-import com.udea.bookclub.dtos.UserDTO;
+import com.udea.bookclub.dtos.*;
 import com.udea.bookclub.exceptions.RepositoryException;
 import com.udea.bookclub.services.facade.IBookClubService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -118,6 +115,20 @@ public class BookClubController {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>("Discussions successfully retrieved", discussions));
         } catch (RepositoryException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO<>(e.getMessage(), null));
+        }
+    }
+
+    @PostMapping("/{bookClubId}/user/{userId}")
+    @Operation(summary = "Join an user to a bookclub")
+    @ApiResponse(responseCode = "200", description = "User successfully joined")
+    @ApiResponse(responseCode = "409", description = "Something went wrong")
+    public ResponseEntity<ResponseDTO<UserBookClubDTO>> joinToBookClub(@PathVariable Long bookClubId, @PathVariable Long userId) {
+        UserBookClubDTO userBookClub = new UserBookClubDTO(null, userId, bookClubId);
+        try {
+            UserBookClubDTO userBookClubJoined = bookClubService.joinToBookClub(userBookClub);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>("User successfully joined", userBookClubJoined));
+        } catch (RepositoryException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseDTO<>(e.getMessage(), null));
         }
     }
 }

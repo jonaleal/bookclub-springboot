@@ -11,5 +11,6 @@ public record BookClubDTO(
         String description,
         List<String> tags,
         String meetLink,
+        String imageLink,
         Long userId) {
 }

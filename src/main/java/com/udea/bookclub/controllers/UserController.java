@@ -4,6 +4,7 @@ import com.udea.bookclub.dtos.LoginAndSignUpDTO;
 import com.udea.bookclub.dtos.ResponseDTO;
 import com.udea.bookclub.dtos.UserDTO;
 import com.udea.bookclub.exceptions.RepositoryException;
+import com.udea.bookclub.models.Role;
 import com.udea.bookclub.services.facade.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,7 +33,7 @@ public class UserController {
     @ApiResponse(responseCode = "201", description = "User successfully created")
     @ApiResponse(responseCode = "409", description = "Something went wrong")
     public ResponseEntity<ResponseDTO<UserDTO>> create(@RequestBody LoginAndSignUpDTO signupRequest) {
-        UserDTO user = UserDTO.builder().username(signupRequest.username()).password(signupRequest.password()).build();
+        UserDTO user = UserDTO.builder().username(signupRequest.username()).password(signupRequest.password()).role(Role.USER).build();
         try {
             UserDTO savedUser = userService.save(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO<>("User successfully created", savedUser));

@@ -1,5 +1,6 @@
 package com.udea.bookclub.dtos;
 
+import com.udea.bookclub.models.Role;
 import jakarta.validation.constraints.Null;
 import lombok.Builder;
 
@@ -10,5 +11,6 @@ public record UserDTO(
         String username,
         String pictureUrl,
         String email,
-        String password) {
+        String password,
+        Role role) {
 }

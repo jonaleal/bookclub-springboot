@@ -1,15 +1,15 @@
 -- Datos de prueba para la entidad User
-INSERT INTO users (username, picture_url, email, password) VALUES
-('admin', null, null, '$2a$10$arxeQ85iHOrXoCPO5WiJYeKxJEiFBb/1xwFbK5QVMKJ5egtuhHLfC'),
-('usuario1', 'https://ejemplo.com/imagen1.jpg', 'usuario1@example.com', '$2a$10$NMYhhLAIjZRYOshZo27WfuVvky1OUtz.ueEUvuLnFvuXl68kxXWbu'),
-('usuario2', 'https://ejemplo.com/imagen2.jpg', 'usuario2@example.com', '$2a$10$2OphBMTB8i0IRrwr1KV53ucDjuFln0EcUs3Qi2jDGquVYb4bZp4Oa'),
-('usuario3', 'https://ejemplo.com/imagen3.jpg', 'usuario3@example.com', '$2a$10$kTwA4Bt61pwkLjQGNTfgou9Qq9Ar2/qg2yMNlGE6afatpQeWdhnMe');
+INSERT INTO users (username, picture_url, email, password, role) VALUES
+('admin', null, null, '$2a$10$arxeQ85iHOrXoCPO5WiJYeKxJEiFBb/1xwFbK5QVMKJ5egtuhHLfC', 'ADMIN'),
+('usuario1', 'https://ejemplo.com/imagen1.jpg', 'usuario1@example.com', '$2a$10$NMYhhLAIjZRYOshZo27WfuVvky1OUtz.ueEUvuLnFvuXl68kxXWbu', 'USER'),
+('usuario2', 'https://ejemplo.com/imagen2.jpg', 'usuario2@example.com', '$2a$10$2OphBMTB8i0IRrwr1KV53ucDjuFln0EcUs3Qi2jDGquVYb4bZp4Oa', 'USER'),
+('usuario3', 'https://ejemplo.com/imagen3.jpg', 'usuario3@example.com', '$2a$10$kTwA4Bt61pwkLjQGNTfgou9Qq9Ar2/qg2yMNlGE6afatpQeWdhnMe', 'USER');
 
 -- Datos de prueba para la entidad BookClub
-INSERT INTO book_clubs (name, description, tags, meet_link, user_id) VALUES
-('Club de Lectura "Viajeros del Tiempo"', 'Un club de lectura dedicado a discutir novelas de ciencia ficción y viajes en el tiempo. Únete a nosotros para explorar mundos nuevos y descubrir las posibilidades del universo.', 'ciencia ficción, viajes en el tiempo, novelas', 'https://meet.example.com/timetravelers', 1),
-('Club de Lectura "Clásicos Literarios"', 'Sumérgete en la rica tradición literaria del mundo con nuestra selección de clásicos literarios. Desde Shakespeare hasta Tolstói, exploraremos obras atemporales y debatiremos sobre su relevancia en la sociedad actual.', 'clásicos, literatura, Shakespeare, Tolstói', 'https://meet.example.com/classics', 2),
-('Club de Lectura "Historias de Misterio"', '¿Te encanta resolver acertijos y descifrar enigmas? Únete a nuestro club de lectura de misterio donde discutimos las mejores novelas de crimen, suspenso y detectives. Prepárate para sumergirte en la intriga y descubrir quién lo hizo.', 'misterio, crimen, detectives', 'https://meet.example.com/mystery', 3);
+INSERT INTO book_clubs (name, description, tags, meet_link, image_link, user_id) VALUES
+('Club de Lectura "Viajeros del Tiempo"', 'Un club de lectura dedicado a discutir novelas de ciencia ficción y viajes en el tiempo. Únete a nosotros para explorar mundos nuevos y descubrir las posibilidades del universo.', 'ciencia ficción, viajes en el tiempo, novelas', 'https://meet.example.com/timetravelers', 'https://image.example.com/1', 1),
+('Club de Lectura "Clásicos Literarios"', 'Sumérgete en la rica tradición literaria del mundo con nuestra selección de clásicos literarios. Desde Shakespeare hasta Tolstói, exploraremos obras atemporales y debatiremos sobre su relevancia en la sociedad actual.', 'clásicos, literatura, Shakespeare, Tolstói', 'https://meet.example.com/classics', 'https://image.example.com/2',  2),
+('Club de Lectura "Historias de Misterio"', '¿Te encanta resolver acertijos y descifrar enigmas? Únete a nuestro club de lectura de misterio donde discutimos las mejores novelas de crimen, suspenso y detectives. Prepárate para sumergirte en la intriga y descubrir quién lo hizo.', 'misterio, crimen, detectives', 'https://meet.example.com/mystery', 'https://image.example.com/3', 3);
 
 -- Datos de prueba para la entidad UserBookClub
 INSERT INTO users_book_clubs (user_id, book_club_id) VALUES

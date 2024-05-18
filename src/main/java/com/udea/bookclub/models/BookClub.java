@@ -32,6 +32,9 @@ public class BookClub {
     @Column(name = "meet_link")
     private String meetLink;
 
+    @Column(name = "image_link")
+    private String imageLink;
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
