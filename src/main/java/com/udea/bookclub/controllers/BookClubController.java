@@ -29,8 +29,12 @@ public class BookClubController {
     @Operation(summary = "Create a bookclub")
     @ApiResponse(responseCode = "201", description = "Bookclub successfully created")
     public ResponseEntity<ResponseDTO<BookClubDTO>> create(@RequestBody BookClubDTO bookClubDTO) {
-        BookClubDTO savedBookClubD = bookClubService.save(bookClubDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO<>("Bookclub successfully created", savedBookClubD));
+        try {
+            BookClubDTO savedBookClub = bookClubService.save(bookClubDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO<>("Bookclub successfully created", savedBookClub));
+        } catch (RepositoryException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseDTO<>(e.getMessage(), null));
+        }
     }
 
     @GetMapping("/")

@@ -29,7 +29,7 @@ public class CalendarController {
         this.bookClubService = bookClubService;
     }
 
-    @PostMapping("/book-club/{bookClubId}/event")
+    @PostMapping("/{bookClubId}/event")
     @Operation(summary = "Create an event in a bookclub")
     @ApiResponse(responseCode = "201", description = "Event successfully created")
     @ApiResponse(responseCode = "409", description = "Something went wrong")

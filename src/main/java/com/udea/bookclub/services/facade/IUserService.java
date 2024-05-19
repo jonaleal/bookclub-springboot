@@ -1,5 +1,6 @@
 package com.udea.bookclub.services.facade;
 
+import com.udea.bookclub.dtos.BookClubDTO;
 import com.udea.bookclub.dtos.UserDTO;
 import com.udea.bookclub.exceptions.RepositoryException;
 import org.springframework.data.domain.Pageable;
@@ -19,4 +20,6 @@ public interface IUserService {
     UserDTO update(UserDTO userDTO) throws RepositoryException;
 
     UserDTO findByUsername(String username);
+
+    List<BookClubDTO> findBookClubsJoinedByUserId(Long userId);
 }

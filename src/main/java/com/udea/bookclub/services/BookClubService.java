@@ -47,6 +47,10 @@ public class BookClubService implements IBookClubService {
 
     @Override
     public BookClubDTO save(BookClubDTO bookClubDTO) {
+        Optional<User> user = userRepository.findById(bookClubDTO.userId());
+        if (user.isEmpty()) {
+            throw new RepositoryException("User not found");
+        }
         BookClub bookClub = bookClubMapper.toBookClub(bookClubDTO);
         return bookClubMapper.toBookClubDTO(bookClubRepository.save(bookClub));
     }

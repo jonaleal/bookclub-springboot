@@ -1,5 +1,6 @@
 package com.udea.bookclub.controllers;
 
+import com.udea.bookclub.dtos.BookClubDTO;
 import com.udea.bookclub.dtos.LoginAndSignUpDTO;
 import com.udea.bookclub.dtos.ResponseDTO;
 import com.udea.bookclub.dtos.UserDTO;
@@ -54,7 +55,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>("Users successfully retrieved", users));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{userId}")
     @Operation(summary = "Get an user by id ")
     @ApiResponse(responseCode = "200", description = "User successfully retrieved")
     @ApiResponse(responseCode = "404", description = "User not found")
@@ -77,6 +78,19 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>("User successfully updated", updateUser));
         } catch (RepositoryException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseDTO<>(e.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/{userId}/joined-book-clubs")
+    @Operation(summary = "Get all book clubs joined by an user")
+    @ApiResponse(responseCode = "200", description = "Book clubs successfully retrieved")
+    @ApiResponse(responseCode = "404", description = "User not found")
+    public ResponseEntity<ResponseDTO<List<BookClubDTO>>> findBookClubsJoinedByUserId(@PathVariable Long userId) {
+        try {
+            List<BookClubDTO> bookClubs = userService.findBookClubsJoinedByUserId(userId);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>("Book clubs successfully retrieved", bookClubs));
+        } catch (RepositoryException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO<>(e.getMessage(), null));
         }
     }
 }

@@ -1,9 +1,12 @@
 package com.udea.bookclub.services;
 
+import com.udea.bookclub.dtos.BookClubDTO;
 import com.udea.bookclub.dtos.UserDTO;
+import com.udea.bookclub.dtos.mappers.IBookClubMapper;
 import com.udea.bookclub.dtos.mappers.IUserMapper;
 import com.udea.bookclub.exceptions.RepositoryException;
 import com.udea.bookclub.models.User;
+import com.udea.bookclub.repositories.IBookClubRepository;
 import com.udea.bookclub.repositories.IUserRepository;
 import com.udea.bookclub.services.facade.IUserService;
 import org.springframework.data.domain.Pageable;
@@ -19,11 +22,15 @@ public class UserService implements IUserService {
     private final IUserRepository userRepository;
     private final IUserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final IBookClubRepository bookClubRepository;
+    private final IBookClubMapper bookClubMapper;
 
-    public UserService(IUserRepository userRepository, IUserMapper userMapper, PasswordEncoder passwordEncoder) {
+    public UserService(IUserRepository userRepository, IUserMapper userMapper, PasswordEncoder passwordEncoder, IBookClubRepository bookClubRepository, IBookClubMapper bookClubMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.bookClubRepository = bookClubRepository;
+        this.bookClubMapper = bookClubMapper;
     }
 
     @Override
@@ -69,6 +76,15 @@ public class UserService implements IUserService {
             throw new RepositoryException("User not found");
         }
         return userMapper.toUserDTO(user.get());
+    }
+
+    @Override
+    public List<BookClubDTO> findBookClubsJoinedByUserId(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new RepositoryException("User not found");
+        }
+        return bookClubMapper.toBookClubsDTO(bookClubRepository.findBookClubsJoinedByUserId(userId));
     }
 
 }
