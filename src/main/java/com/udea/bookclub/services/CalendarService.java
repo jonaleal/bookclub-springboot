@@ -136,6 +136,17 @@ public class CalendarService implements ICalendarService {
     }
 
     @Override
+    public Event getEvent(String meetLink) throws IOException, GeneralSecurityException {
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        Calendar service =
+                new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                        .setApplicationName(APPLICATION_NAME)
+                        .build();
+
+        return service.events().get(CALENDAR_ID, meetLink).execute();
+    }
+
+    @Override
     public Event updateEvent(EventRequest eventRequest, String meetLink) throws GeneralSecurityException, IOException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -144,7 +155,7 @@ public class CalendarService implements ICalendarService {
                         .setApplicationName(APPLICATION_NAME)
                         .build();
 
-        // Create a new event
+        // Ge a new event
         Event event = service.events().get(CALENDAR_ID, meetLink).execute();
         event.setSummary(eventRequest.summary());
         event.setDescription(eventRequest.description());

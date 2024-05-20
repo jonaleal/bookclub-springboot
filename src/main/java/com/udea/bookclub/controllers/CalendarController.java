@@ -83,6 +83,26 @@ public class CalendarController {
 //        }
 //    }
 
+    @GetMapping("/{bookClubId}/event")
+    @Operation(summary = "Get an event in a bookclub")
+    @ApiResponse(responseCode = "200", description = "Event successfully retrieved")
+    @ApiResponse(responseCode = "404", description = "Event not found")
+    public ResponseEntity<ResponseDTO<EventData>> getEvent(@PathVariable Long bookClubId) {
+        BookClubDTO foundBookClub = bookClubService.findById(bookClubId);
+        try {
+            Event resultEvent = calendarService.getEvent(foundBookClub.meetLink());
+            EventData eventData = new EventData(
+                    resultEvent.getSummary(),
+                    resultEvent.getDescription(),
+                    resultEvent.getStart().getDateTime().toString(),
+                    resultEvent.getEnd().getDateTime().toString()
+            );
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>("Event successfully retrieved", eventData));
+        } catch (GeneralSecurityException | IOException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO<>("Event not found", null));
+        }
+    }
+
     @PutMapping("/{bookClubId}/event")
     @Operation(summary = "Update an event in a bookclub")
     @ApiResponse(responseCode = "201", description = "Event successfully updated")

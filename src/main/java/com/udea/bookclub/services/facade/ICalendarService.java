@@ -10,5 +10,7 @@ public interface ICalendarService {
 
     Event createEvent(EventRequest eventRequest) throws IOException, GeneralSecurityException;
 
+    Event getEvent(String meetLink) throws IOException, GeneralSecurityException;
+
     Event updateEvent(EventRequest eventRequest, String meetLink) throws IOException, GeneralSecurityException;
 }
