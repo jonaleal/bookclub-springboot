@@ -45,5 +45,8 @@ public class BookClub {
     @OneToMany(mappedBy = "bookClub", cascade = CascadeType.REMOVE)
     private List<UserBookClub> bookClubUsers;
 
+    @OneToMany(mappedBy = "bookClub", cascade = CascadeType.REMOVE)
+    private List<BookReview> bookReviews;
+
 }
 
