@@ -81,7 +81,7 @@ public class CalendarService implements ICalendarService {
     }
 
     @Override
-    public String createEvent(EventRequest eventRequest) throws GeneralSecurityException, IOException {
+    public Event createEvent(EventRequest eventRequest) throws GeneralSecurityException, IOException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Calendar service =
@@ -128,11 +128,56 @@ public class CalendarService implements ICalendarService {
         event.setConferenceData(conferenceData);
 
         // Add the event to the calendar
-        var resultEvent =service.events().insert(CALENDAR_ID, event)
+        var resultEvent = service.events().insert(CALENDAR_ID, event)
                 .setConferenceDataVersion(1)
                 .execute();
 
-        return resultEvent.getHtmlLink();
+        return resultEvent;
+    }
+
+    @Override
+    public Event updateEvent(EventRequest eventRequest, String meetLink) throws GeneralSecurityException, IOException {
+        // Build a new authorized API client service.
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        Calendar service =
+                new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                        .setApplicationName(APPLICATION_NAME)
+                        .build();
+
+        // Create a new event
+        Event event = service.events().get(CALENDAR_ID, meetLink).execute();
+        event.setSummary(eventRequest.summary());
+        event.setDescription(eventRequest.description());
+
+        // Set the start time
+        DateTime startDateTime = new DateTime(eventRequest.startDateTime());
+        EventDateTime start = new EventDateTime()
+                .setDateTime(startDateTime)
+                .setTimeZone("America/Bogota");
+        event.setStart(start);
+
+        // Set the end time
+        DateTime endDateTime = new DateTime(eventRequest.endDateTime());
+        EventDateTime end = new EventDateTime()
+                .setDateTime(endDateTime)
+                .setTimeZone("America/Bogota");
+        event.setEnd(end);
+
+        // Add attendees
+        List<EventAttendee> attendees = new ArrayList<>();
+        for (String attendee : eventRequest.attendees()) {
+            EventAttendee eventAttendee = new EventAttendee();
+            eventAttendee.setEmail(attendee);
+            attendees.add(eventAttendee);
+        }
+        event.setAttendees(attendees);
+
+        // Add the event to the calendar
+        var resultEvent = service.events().update(CALENDAR_ID, meetLink, event)
+                .setConferenceDataVersion(1)
+                .execute();
+
+        return resultEvent;
     }
 }
 

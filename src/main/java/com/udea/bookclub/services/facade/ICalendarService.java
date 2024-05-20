@@ -1,5 +1,6 @@
 package com.udea.bookclub.services.facade;
 
+import com.google.api.services.calendar.model.Event;
 import com.udea.bookclub.dtos.EventRequest;
 
 import java.io.IOException;
@@ -7,5 +8,7 @@ import java.security.GeneralSecurityException;
 
 public interface ICalendarService {
 
-    String createEvent(EventRequest eventRequest) throws IOException, GeneralSecurityException;
+    Event createEvent(EventRequest eventRequest) throws IOException, GeneralSecurityException;
+
+    Event updateEvent(EventRequest eventRequest, String meetLink) throws IOException, GeneralSecurityException;
 }
