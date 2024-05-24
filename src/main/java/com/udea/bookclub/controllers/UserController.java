@@ -59,9 +59,9 @@ public class UserController {
     @Operation(summary = "Get an user by id ")
     @ApiResponse(responseCode = "200", description = "User successfully retrieved")
     @ApiResponse(responseCode = "404", description = "User not found")
-    public ResponseEntity<ResponseDTO<UserDTO>> findById(@PathVariable Long id) {
+    public ResponseEntity<ResponseDTO<UserDTO>> findById(@PathVariable Long userId) {
         try {
-            UserDTO user = userService.findById(id);
+            UserDTO user = userService.findById(userId);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO<>("User successfully retrieved", user));
         } catch (RepositoryException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO<>(e.getMessage(), null));
